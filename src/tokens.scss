@@ -1,0 +1,156 @@
+/* ===== Design tokens — single source of truth =====
+   Identity: "Ivory & Navy". A calm warm-ivory canvas, deep navy ink, Gujarat blue for actions and a marigold-saffron accent
+   (the two colours of the Digital Gujarat logo, used with restraint). Editorial serif headings (Fraunces) over Inter body text.
+   --brand* / --accent* are rewritten at runtime by the colour-theme picker (app.ts); surfaces, ink and borders derive from them.
+   The home hero and every page banner are LOCKED to their original look through the --bn-* tokens at the bottom of this file. */
+
+:root {
+  /* ---- brand: interactive colour (theme-switchable) ---- */
+  --brand: #1a4a94;
+  --brand-rgb: 26, 74, 148;
+  --brand-2: #2f6bc4;
+  --brand-2-rgb: 47, 107, 196;
+  --brand-3: #cfe0f7;
+  /* accent: highlights only (badges, step numbers, underline marks, progress) */
+  --accent: #e8891d;
+  --accent-rgb: 232, 137, 29;
+  --accent-ink: #9a5a05;            /* accent as readable text on light surfaces (≥4.5:1) */
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, #fff);
+
+  /* ---- ink: deep surfaces (footer, stats, promo) — shades of the brand ---- */
+  --ink: color-mix(in srgb, var(--brand) 45%, #040a1c);
+  --ink-2: color-mix(in srgb, var(--brand) 72%, #040a1c);
+  --ink-rgb: 13, 37, 78;
+
+  /* ---- surfaces & text (light) ---- */
+  --dg-bg: color-mix(in srgb, var(--brand) 3%, #faf7f1);        /* page: warm ivory */
+  --dg-alt: color-mix(in srgb, var(--brand) 2%, #f6f1e7);       /* alternate sections: sand */
+  --dg-card: #ffffff;
+  --dg-text: color-mix(in srgb, var(--brand) 22%, #0a1226);     /* headings + body */
+  --dg-muted: color-mix(in srgb, var(--brand) 14%, #5a6173);
+  --dg-border: color-mix(in srgb, var(--brand) 8%, #e6dfd0);
+  --dg-hero-bg: var(--ink);
+  --dg-success: #1f7a4d;
+  --dg-warning: #b45309;
+  --dg-danger: #b42318;
+
+  /* ---- typography ---- */
+  --font-heading: 'Fraunces', 'Georgia', serif;          /* section / card headings */
+  --font-display: 'Sora', 'Inter', system-ui, sans-serif; /* banners, numerals, UI labels */
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-h4: 1.0625rem;
+  --fs-h3: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  --fs-h2: clamp(1.75rem, 1.15rem + 2.3vw, 2.7rem);
+  --fs-h1: clamp(2.35rem, 1.3rem + 4.4vw, 4.2rem);
+  --lh-tight: 1.08;
+  --lh-snug: 1.22;
+  --lh-body: 1.65;
+
+  /* ---- spacing (4-pt scale) ---- */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 72px; --sp-9: 104px;
+  --section-y: clamp(60px, 4vw + 36px, 112px);
+  --gutter: 16px;
+  --container-max: 1200px;
+
+  /* ---- shape ---- */
+  --r-sm: 12px; --r-md: 16px; --r-lg: 24px; --r-xl: 32px; --r-pill: 999px;
+
+  /* ---- elevation: soft, never heavy ---- */
+  --sh-1: 0 1px 2px rgba(var(--ink-rgb), 0.05), 0 4px 14px rgba(var(--ink-rgb), 0.04);
+  --sh-2: 0 10px 30px -8px rgba(var(--ink-rgb), 0.14), 0 2px 6px rgba(var(--ink-rgb), 0.04);
+  --sh-3: 0 30px 70px -18px rgba(var(--ink-rgb), 0.38);
+  --dg-shadow: var(--sh-2);
+  --sh-glow: 0 12px 26px -8px rgba(var(--brand-rgb), 0.45);
+
+  /* ---- motion ---- */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --t-fast: 0.15s;
+  --t-base: 0.3s;
+  --t-slow: 0.6s;
+
+  /* ---- gradients: used sparingly ---- */
+  --grad-brand: linear-gradient(135deg, var(--brand), color-mix(in srgb, var(--brand) 78%, var(--brand-2)));
+  --grad-ink: linear-gradient(145deg, var(--ink), var(--ink-2));
+  --grad-aurora:
+    radial-gradient(55% 70% at 92% 0%, rgba(var(--accent-rgb), 0.22), transparent 62%),
+    radial-gradient(50% 60% at 0% 100%, rgba(var(--brand-2-rgb), 0.32), transparent 62%),
+    linear-gradient(150deg, var(--ink), var(--ink-2));
+
+  /* ---- layers ---- */
+  --z-header: 50; --z-progress: 2000; --z-overlay: 3000; --z-loader: 99999;
+
+  /* ---- banner lock (hero + page banners keep their original palette; the theme picker still tints them) ---- */
+  --bn-brand: #1b5cb8; --bn-brand-rgb: 27, 92, 184;
+  --bn-brand-2: #3b8de6; --bn-brand-2-rgb: 59, 141, 230;
+  --bn-brand-3: #bcd9f7;
+  --bn-accent: #f5992a; --bn-accent-rgb: 245, 153, 42;
+  --bn-ink-rgb: 19, 64, 129;
+}
+
+:root.app-dark {
+  --dg-bg: #0a0f1c;
+  --dg-alt: #101728;
+  --dg-card: #151d31;
+  --dg-text: #edf0f7;
+  --dg-muted: #9ba5bf;
+  --dg-border: #232d47;
+  --dg-hero-bg: #060914;
+  --dg-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --sh-2: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --sh-3: 0 30px 70px -18px rgba(0, 0, 0, 0.8);
+  --ink: color-mix(in srgb, var(--brand) 22%, #02060f);
+  --ink-2: color-mix(in srgb, var(--brand) 40%, #02060f);
+  --ink-rgb: 9, 22, 48;
+  --brand: #5b8fe0;
+  --brand-rgb: 91, 143, 224;
+  --brand-2: #7fa9ec;
+  --brand-2-rgb: 127, 169, 236;
+  --accent-ink: #f0a54a;
+  --btn-ink: #06122b;               /* dark text on the lighter dark-mode blue keeps buttons ≥4.5:1 */
+  --accent-soft: color-mix(in srgb, var(--accent) 20%, #151d31);
+  --bn-brand: #3f86e8; --bn-brand-rgb: 63, 134, 232;
+  --bn-brand-2: #6aa6f2; --bn-brand-2-rgb: 106, 166, 242;
+}
+
+/* ===== Banner lock =====
+   Everything inside the hero and the inner-page banners reads the ORIGINAL palette. Custom properties that are built from other
+   custom properties are resolved where they are declared, so the derived ones are re-declared here. */
+.hero, .page-hero {
+  --brand: var(--bn-brand); --brand-rgb: var(--bn-brand-rgb);
+  --brand-2: var(--bn-brand-2); --brand-2-rgb: var(--bn-brand-2-rgb);
+  --brand-3: var(--bn-brand-3);
+  --accent: var(--bn-accent); --accent-rgb: var(--bn-accent-rgb);
+  --ink: color-mix(in srgb, var(--bn-brand) 70%, #000);
+  --ink-2: color-mix(in srgb, var(--bn-brand) 96%, #000);
+  --ink-rgb: var(--bn-ink-rgb);
+  --font-heading: var(--font-display);
+  --btn-ink: #fff;
+  --grad-brand: linear-gradient(135deg, var(--bn-brand), var(--bn-brand-2));
+  --grad-ink: linear-gradient(145deg, var(--ink), var(--ink-2));
+  --grad-aurora:
+    radial-gradient(60% 70% at 88% 0%, rgba(var(--bn-accent-rgb), 0.38), transparent 60%),
+    radial-gradient(55% 65% at 0% 100%, rgba(var(--bn-brand-2-rgb), 0.5), transparent 62%),
+    linear-gradient(145deg, var(--ink), var(--ink-2));
+  --sh-glow: 0 14px 32px -6px rgba(var(--bn-brand-rgb), 0.45);
+  --sh-1: 0 1px 2px rgba(var(--bn-ink-rgb), 0.05), 0 4px 14px rgba(var(--bn-ink-rgb), 0.04);
+  --sh-2: 0 10px 30px -6px rgba(var(--bn-ink-rgb), 0.12), 0 2px 6px rgba(var(--bn-ink-rgb), 0.04);
+  --sh-3: 0 30px 70px -18px rgba(var(--bn-ink-rgb), 0.38);
+}
+
+/* dark mode: banners keep the darker banner shades they always had */
+:root.app-dark .hero, :root.app-dark .page-hero {
+  --ink: color-mix(in srgb, var(--bn-brand) 38%, #000);
+  --ink-2: color-mix(in srgb, var(--bn-brand) 62%, #000);
+  --ink-rgb: 10, 28, 61;
+}
+
+@media (min-width: 480px) { :root { --gutter: 20px; } }
+@media (min-width: 768px) { :root { --gutter: 28px; } }
+@media (min-width: 1536px) { :root { --container-max: 1360px; } }
+@media (min-width: 1800px) { :root { --container-max: 1520px; } }
