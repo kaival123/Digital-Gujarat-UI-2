@@ -24,7 +24,6 @@ main > *:not(router-outlet) { display: block; animation: pageIn 0.6s var(--ease-
 @keyframes pageIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 
 /* ---- header ---- */
-.site-header .brand img { transition: height 0.3s var(--ease-out); }
 html, body { overflow-x: clip; }
 /* modal open (set by shared/scroll-lock.ts): the page behind stays put, the scrollbar gutter is kept so nothing shifts sideways,
    and scrolling past the end of a popup's own content never chains through to the page */
@@ -117,7 +116,7 @@ kbd { font: 700 0.72rem var(--font-body); border: 1px solid var(--dg-border); bo
 .pal-foot { display: flex; gap: 18px; padding: 10px 16px; border-top: 1px solid var(--dg-border); color: var(--dg-muted); font-size: 0.8rem; background: var(--dg-alt); }
 
 /* ---- dark mode touches ---- */
-:root.app-dark { .site-header.scrolled { background: color-mix(in srgb, var(--dg-card) 85%, transparent); } }
+:root.app-dark { .site-header.scrolled .header-inner::before { background: color-mix(in srgb, var(--dg-card) 85%, transparent); } }
 
 /* ---- respect reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {

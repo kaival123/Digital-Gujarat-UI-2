@@ -17,6 +17,7 @@ export interface SearchHit {
 const PAGES: SearchHit[] = [
   { title: 'Citizen Login / Register', kind: 'Page', icon: 'pi pi-sign-in', route: '/citizen-login' },
   { title: 'About Us', kind: 'Page', icon: 'pi pi-info-circle', route: '/about-us' },
+  { title: 'Certificates', kind: 'Page', icon: 'pi pi-verified', route: '/services/certificates' },
   { title: 'Latest Update – news, circulars, GRs', kind: 'Page', icon: 'pi pi-megaphone', route: '/latest-update' },
   { title: 'FAQ – frequently asked questions', kind: 'Page', icon: 'pi pi-question-circle', route: '/faq' },
   { title: 'Helpdesk Support – toll free number', kind: 'Page', icon: 'pi pi-headphones', route: '/help-desk' },

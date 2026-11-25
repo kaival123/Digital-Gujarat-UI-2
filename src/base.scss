@@ -51,30 +51,39 @@ img { max-width: 100%; }
 }
 
 /* ---------- header: floating glass pill that becomes a full-width (container-fluid) bar on scroll ----------
-   Width, corners, offset, padding, shadow and logo size all transition together (0.55 s ease-out), so the pill glides open into an edge-to-edge bar
-   while its content stays aligned with the page container (the side padding grows to (viewport − container) / 2). */
+   Smoothness: nothing that affects layout is animated. The header row is always full width with its content aligned to the page container;
+   the pill and the bar are two background layers (::after / ::before) that cross-fade, and the vertical offset and logo size change via
+   transform. Only opacity + transform transition, so the change runs on the compositor with no per-frame layout or menu reflow. */
 .site-header {
-  --hd-ease: 0.55s var(--ease-out);
+  --hd-ease: 0.45s var(--ease-out);
+  --hd-side: max(var(--gutter), (100% - var(--container-max)) / 2); /* gap between viewport edge and the page container */
+  --hd-pl: 18px; --hd-pr: 10px; --hd-py: 8px;                        /* content padding inside the pill */
   position: sticky; top: 0; z-index: var(--z-header); height: 0; pointer-events: none;
   .header-inner {
-    pointer-events: auto; position: relative; top: 10px; display: flex; align-items: center; gap: 14px;
-    width: min(var(--container-max), 100% - var(--gutter) * 2); margin-inline: auto; padding: 8px 10px 8px 18px; border-radius: var(--r-pill);
-    background: color-mix(in srgb, var(--dg-card) 82%, transparent); border: 1px solid color-mix(in srgb, var(--dg-border) 80%, transparent);
-    backdrop-filter: blur(18px) saturate(1.6); box-shadow: var(--sh-2);
-    transition: width var(--hd-ease), top var(--hd-ease), padding var(--hd-ease), border-radius var(--hd-ease), box-shadow var(--hd-ease), background var(--hd-ease), border-color var(--hd-ease);
-    will-change: width;
+    pointer-events: none; position: relative; isolation: isolate; display: flex; align-items: center; gap: 14px;
+    width: 100%; margin: 0; padding: var(--hd-py) calc(var(--hd-side) + var(--hd-pr)) var(--hd-py) calc(var(--hd-side) + var(--hd-pl));
+    transform: translateY(10px); transition: transform var(--hd-ease);
+    > * { pointer-events: auto; } /* the transparent strip beside the pill must not block clicks on the page */
+    &::before, &::after { content: ''; position: absolute; z-index: -1; pointer-events: none; backdrop-filter: blur(18px) saturate(1.6);
+      transition: opacity var(--hd-ease), transform var(--hd-ease); }
+    /* pill */
+    &::after { inset: 0 var(--hd-side); border-radius: var(--r-pill); box-shadow: var(--sh-2);
+      background: color-mix(in srgb, var(--dg-card) 82%, transparent); border: 1px solid color-mix(in srgb, var(--dg-border) 80%, transparent); }
+    /* full-width bar */
+    &::before { inset: 0; border-radius: 0 0 var(--r-lg) var(--r-lg); opacity: 0; transform: translateY(-8px);
+      background: color-mix(in srgb, var(--dg-card) 94%, transparent); border-bottom: 1px solid var(--dg-border); box-shadow: 0 10px 30px -12px rgba(var(--ink-rgb), 0.28); }
   }
   &.scrolled .header-inner {
-    width: 100%; top: 0; padding: 6px max(var(--gutter), calc((100vw - var(--container-max)) / 2));
-    border-radius: 0 0 var(--r-lg) var(--r-lg); border-color: transparent; border-bottom-color: var(--dg-border);
-    background: color-mix(in srgb, var(--dg-card) 94%, transparent); box-shadow: 0 10px 30px -12px rgba(var(--ink-rgb), 0.28);
-    .brand .emblem { height: 38px; } .brand .logo { height: 34px; }
+    transform: none; pointer-events: auto; /* the bar spans the full width, so all of it is the header */
+    &::after { opacity: 0; transform: scaleX(1.03); }
+    &::before { opacity: 1; transform: none; }
+    .brand { transform: scale(0.88); }
   }
-  .brand { display: flex; align-items: center; gap: 12px; .emblem { height: 44px; } .logo { height: 40px; } img { transition: height var(--hd-ease); } }
+  .brand { display: flex; align-items: center; gap: 12px; transform-origin: left center; transition: transform var(--hd-ease); .emblem { height: 44px; } .dst-logo { height: 44px; width: auto; } .logo { height: 40px; } }
   .main-nav { flex: 1; min-width: 0; }
   .p-menubar { border: 0; background: transparent; justify-content: flex-end; }
 }
-:root.app-dark .site-header .logo { background: #fff; border-radius: 8px; padding: 2px 6px; }
+:root.app-dark .site-header .logo, :root.app-dark .site-header .dst-logo { background: #fff; border-radius: 8px; padding: 2px 6px; }
 :root.app-dark .site-header .emblem { filter: invert(1) brightness(1.15); }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
@@ -135,7 +144,7 @@ img { max-width: 100%; }
   .footer-grid, .footer-bottom { position: relative; }
   .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: var(--sp-7); padding-bottom: var(--sp-7); }
   .logo { height: 48px; background: #fff; border-radius: var(--r-sm); padding: 4px 10px; }
-  .dst { height: 50px; margin-top: 8px; background: #fff; border-radius: var(--r-sm); padding: 4px 8px; }
+  .dst { height: 50px; width: auto; max-width: 100%; margin-top: 8px; display: block; }
   .footer-brand { display: grid; gap: 16px; justify-items: start; p { margin: 0; max-width: 360px; color: rgba(214, 218, 243, 0.75); } }
   .social { display: flex; gap: 10px; a { width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); display: grid; place-items: center; transition: background var(--t-base), transform var(--t-base) var(--ease-out), border-color var(--t-base); &:hover { background: var(--brand); border-color: transparent; transform: translateY(-3px); } } }
   h4 { color: #fff; margin-bottom: 18px; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; }
@@ -152,6 +161,7 @@ img { max-width: 100%; }
 @media (max-width: 560px) {
   .brand .emblem { height: 40px !important; }
   .brand .logo { height: 38px !important; }
+  .brand .dst-logo { height: 38px !important; }
   .topbar .social { display: none; }
 }
 

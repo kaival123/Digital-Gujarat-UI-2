@@ -15,6 +15,7 @@ export const routes: Routes = [
   { path: 'services/citizen', loadComponent: () => import('./pages/service-list').then((m) => m.ServiceListPage), data: { key: 'citizen' }, title: 'Citizen Services | Digital Gujarat' },
   { path: 'services/digital-sevasetu', loadComponent: () => import('./pages/service-list').then((m) => m.ServiceListPage), data: { key: 'dss' }, title: 'Digital SevaSetu Services | Digital Gujarat' },
   { path: 'services/janseva', loadComponent: () => import('./pages/service-list').then((m) => m.ServiceListPage), data: { key: 'janseva' }, title: 'Janseva Services | Digital Gujarat' },
+  { path: 'services/certificates', loadComponent: () => import('./pages/certificates').then((m) => m.CertificatesPage), title: 'Certificates | Digital Gujarat' },
   { path: 'services/linked', loadComponent: () => import('./pages/linked-services').then((m) => m.LinkedServicesPage), title: 'Linked Services | Digital Gujarat' },
   { path: 'latest-update', loadComponent: () => import('./pages/latest-update').then((m) => m.LatestUpdatePage), title: 'Latest Update | Digital Gujarat' },
   { path: 'faq', loadComponent: () => import('./pages/faq').then((m) => m.FaqPage), title: 'FAQ | Digital Gujarat' },

@@ -139,9 +139,9 @@
 
 /* ===== Dark mode: the service icons are dark line art, so their tiles turn light; link text is lifted for contrast ===== */
 :root.app-dark {
-  .tc-icon, .ex-card img, .svc-card img { background: #e8eefb; }
-  .trend-card:hover .tc-icon { background: #f3f6fd; }
-  .ex-card:hover img { background: #f3f6fd; }
+  .tc-icon, .ex-card img, .svc-card img { background: color-mix(in srgb, var(--brand) 10%, #fff); }
+  .trend-card:hover .tc-icon { background: color-mix(in srgb, var(--brand) 5%, #fff); }
+  .ex-card:hover img { background: color-mix(in srgb, var(--brand) 5%, #fff); }
   .trend-card .more { background: rgba(var(--brand-rgb), 0.2); color: color-mix(in srgb, var(--brand) 55%, #fff); }
   .trend-card:hover .more { background: var(--brand); color: #06122b; }
   .more { color: color-mix(in srgb, var(--brand) 55%, #fff); }

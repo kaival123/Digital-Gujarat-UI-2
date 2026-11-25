@@ -54,7 +54,7 @@ export class App {
       const li = this.hoverOpened;
       if (li && (e.target as Element).closest?.('.p-menubar-item-content') && li.contains(e.target as Node) && li.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); this.hoverOpened = null; }
     }, true);
-    // a saved choice wins; first-time visitors get the default (saffron) theme without it being written to storage
+    // a saved choice wins; first-time visitors get the default (Govt Blue) theme without it being written to storage
     let saved: string | null = null;
     try { saved = localStorage.getItem(App.THEME_KEY); } catch { /* storage unavailable */ }
     const initial = this.themes.find((x) => x.key === saved) ?? this.themes.find((x) => x.key === App.DEFAULT_THEME)!;
@@ -72,7 +72,8 @@ export class App {
     const max = h.scrollHeight - h.clientHeight;
     const p = max > 0 ? Math.min(1, h.scrollTop / max) : 0;
     if (Math.abs(p - this.progress()) > 0.002) this.progress.set(p);
-    const s = h.scrollTop > 60;
+    // hysteresis: switch to the bar past 80px, back to the pill only above 30px, so small scroll jitter near one threshold can't flip it back and forth
+    const s = this.scrolled() ? h.scrollTop > 30 : h.scrollTop > 80;
     if (s !== this.scrolled()) this.scrolled.set(s);
   }
 
@@ -180,9 +181,9 @@ export class App {
     { key: 'rose', name: 'Rose', main: '#a8174f', a2: '#d9457f', a3: '#f8cfe0', accent: '#e8a21d', ink: '#8a5a00' },
     { key: 'violet', name: 'Violet', main: '#4f35b0', a2: '#7a5fe0', a3: '#d8d0fa', accent: '#e8891d', ink: '#9a5a05' },
   ];
-  private static readonly DEFAULT_THEME = 'saffron';
-  /** v2: choices saved before saffron became the default are ignored once, so everyone starts on saffron. */
-  private static readonly THEME_KEY = 'dg-theme-v2';
+  private static readonly DEFAULT_THEME = 'official';
+  /** v3: choices saved before Govt Blue became the default are ignored once, so everyone starts on Govt Blue. */
+  private static readonly THEME_KEY = 'dg-theme-v3';
   theme = signal(this.themes.find((x) => x.key === App.DEFAULT_THEME)!);
   themeOpen = signal(false);
 

@@ -68,7 +68,7 @@ html.a11y-lh-2 body, html.a11y-lh-2 p, html.a11y-lh-2 li, html.a11y-lh-2 dd, htm
 /* ---- Big cursor, hide images, invert keeps photos natural ---- */
 html.a11y-cur-1, html.a11y-cur-1 * { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><path d='M4 2l16 9-7 2 4 8-3 1-4-8-5 5z' fill='black' stroke='white' stroke-width='1.5'/></svg>") 4 2, auto !important; }
 html.a11y-cur-2, html.a11y-cur-2 * { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 24 24'><path d='M4 2l16 9-7 2 4 8-3 1-4-8-5 5z' fill='black' stroke='white' stroke-width='1.5'/></svg>") 4 2, auto !important; }
-html.a11y-noimg img:not(.emblem):not(.logo), html.a11y-noimg .exp-bg, html.a11y-noimg .glimpse-img, html.a11y-noimg .thumb img { opacity: 0 !important; }
+html.a11y-noimg img:not(.emblem):not(.logo):not(.dst-logo), html.a11y-noimg .exp-bg, html.a11y-noimg .glimpse-img, html.a11y-noimg .thumb img { opacity: 0 !important; }
 html.a11y-invert img, html.a11y-invert video, html.a11y-invert .exp-bg { filter: invert(1) hue-rotate(180deg); }
 
 /* ---- floating accessibility button (right side, like the UX4G widget) ---- */

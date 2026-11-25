@@ -23,8 +23,8 @@
         violet: ['#4f35b0', '#7a5fe0', '#d8d0fa', '#e8891d']
       };
       var k = null;
-      try { k = localStorage.getItem('dg-theme-v2'); } catch (e) { /* storage unavailable */ }
-      var t = T[k] || T.saffron, s = document.documentElement.style;
+      try { k = localStorage.getItem('dg-theme-v3'); } catch (e) { /* storage unavailable */ }
+      var t = T[k] || T.official, s = document.documentElement.style;
       s.setProperty('--al-main', t[0]); s.setProperty('--al-a2', t[1]); s.setProperty('--al-a3', t[2]); s.setProperty('--al-acc', t[3]);
     })();
   </script>

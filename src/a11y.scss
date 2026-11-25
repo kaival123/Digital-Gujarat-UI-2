@@ -47,7 +47,9 @@ html.a11y-nomotion .hv-orbit, html.lite .hv-orbit, html.a11y-nomotion .hero-mesh
 /* ---- Light mode: fewer expensive effects, less data/CPU on slow connections ---- */
 html.lite {
   .hero-mesh, .hero-grid, .hv-orbit, .scroll-progress, .blob { display: none !important; }
-  * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  *, *::before, *::after { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  /* no blur behind the header, so make its pill / bar opaque to keep the menu readable */
+  .site-header .header-inner::before, .site-header .header-inner::after { background: var(--dg-card) !important; }
   .hero, .stats, .promo, .cta-band { background-image: none !important; }
   /* hero copy is white-on-dark, so keep a flat dark fill (gradients dropped, contrast kept) */
   .hero, .stats, .promo, .cta-band { background: var(--ink) !important; }

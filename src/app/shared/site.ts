@@ -20,6 +20,7 @@ export const NAV: MenuItem[] = openExternal([
     label: 'Services',
     items: [
       { label: 'Citizen Services', icon: 'pi pi-users', routerLink: '/services/citizen' },
+      { label: 'Certificates', icon: 'pi pi-verified', routerLink: '/services/certificates' },
       { label: 'Digital SevaSetu Services', icon: 'pi pi-bolt', routerLink: '/services/digital-sevasetu' },
       { label: 'Janseva Services', icon: 'pi pi-building', routerLink: '/services/janseva' },
       { label: 'Scholarship Services', icon: 'pi pi-graduation-cap', url: 'https://gssp.gujarat.gov.in/' },
@@ -86,6 +87,7 @@ const ROUTES: Record<string, string> = {
   'AboutUs.aspx': '/about-us',
   'SugamDGAbhiyanServices.aspx': '/sugam-digital-gujarat',
   'CitizenServices.aspx': '/services/citizen',
+  'certificates': '/services/certificates', // new page, no counterpart on the old portal
   'DSSServices.aspx': '/services/digital-sevasetu',
   'JansevaServices.aspx': '/services/janseva',
   'NesdaServices.aspx': '/services/linked',

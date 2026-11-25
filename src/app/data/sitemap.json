@@ -116,6 +116,10 @@
     "url": "../Services/CitizenServices.aspx"
    },
    {
+    "label": "Certificates",
+    "url": "/services/certificates"
+   },
+   {
     "label": "Digital SevaSetu Services",
     "url": "../Services/DSSServices.aspx"
    },
