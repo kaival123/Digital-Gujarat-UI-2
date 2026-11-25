@@ -202,7 +202,7 @@ input[type='search']::-webkit-search-cancel-button:hover { opacity: 1; }
 @media (max-width: 560px) { .svc-form .svc-grid, .svc-form .svc-grid.three { grid-template-columns: 1fr; } .svc-form .svc-actions button { flex: 1 1 100%; } .svc-summary div { grid-template-columns: 1fr; gap: 2px; } }
 
 /* ---------- certificate application: stepper + step 2 parts ---------- */
-.svc-stepper { list-style: none; margin: 0 0 var(--sp-4); padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); scroll-margin-top: 110px;
+.svc-stepper { list-style: none; margin: 0 0 var(--sp-4); padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); scroll-margin-top: calc(110px + var(--topbar-h, 0px));
   li { position: relative; display: grid; justify-items: center; gap: 8px; text-align: center; color: var(--dg-muted); font-size: var(--fs-sm); font-weight: 650;
     &:not(:last-child)::after { content: ''; position: absolute; top: 18px; left: calc(50% + 24px); right: calc(-50% + 24px); height: 3px; border-radius: 3px; background: var(--dg-border); transition: background var(--t-base); }
     &.complete::after { background: var(--brand); } }

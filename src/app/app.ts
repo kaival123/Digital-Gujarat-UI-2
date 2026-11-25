@@ -1,4 +1,4 @@
-import { Component, HostListener, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostListener, afterNextRender, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommandPalette } from './shared/command-palette';
 import { SearchService } from './shared/search.service';
 import { initScrollLock } from './shared/scroll-lock';
@@ -44,6 +44,14 @@ export class App {
 
   constructor() {
     initScrollLock();
+    // the header sticks just below the sticky utility bar; keep --topbar-h equal to the bar's real height (it wraps on small screens and grows with text size)
+    afterNextRender(() => {
+      const bar = document.querySelector<HTMLElement>('.topbar');
+      if (!bar) return;
+      const set = () => document.documentElement.style.setProperty('--topbar-h', bar.getBoundingClientRect().height + 'px');
+      set();
+      new ResizeObserver(set).observe(bar);
+    });
     let navTimer: ReturnType<typeof setTimeout> | undefined;
     inject(Router).events.subscribe((e) => {
       // only show the bar if a navigation is still pending after 150ms, so fast page changes never flash it

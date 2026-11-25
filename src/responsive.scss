@@ -94,7 +94,7 @@ fieldset { min-width: 0; }
 /* ---- compact header on tablets/phones: logo · search · login · menu in one row ---- */
 @media (max-width: 1180px) {
   .site-header {
-    --hd-pl: 14px; --hd-pr: 8px; --hd-py: 6px;
+    --hd-py: 6px;
     .header-inner { flex-wrap: nowrap; gap: 10px; }
     .brand { margin-right: auto; min-width: 0; }
     .main-nav { order: 3; flex: 0 0 auto; flex-basis: auto; }
