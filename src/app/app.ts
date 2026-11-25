@@ -54,7 +54,11 @@ export class App {
       const li = this.hoverOpened;
       if (li && (e.target as Element).closest?.('.p-menubar-item-content') && li.contains(e.target as Node) && li.getAttribute('aria-expanded') === 'true') { e.stopPropagation(); this.hoverOpened = null; }
     }, true);
-    try { const k = localStorage.getItem('dg-theme'); const t = this.themes.find((x) => x.key === k); if (t && t.key !== 'official') this.setTheme(t); } catch { /* storage unavailable */ }
+    // a saved choice wins; first-time visitors get the default (saffron) theme without it being written to storage
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(App.THEME_KEY); } catch { /* storage unavailable */ }
+    const initial = this.themes.find((x) => x.key === saved) ?? this.themes.find((x) => x.key === App.DEFAULT_THEME)!;
+    this.setTheme(initial, false);
     // Passive + rAF-throttled: scrolling never blocks, and signals only change when the value does.
     window.addEventListener('scroll', () => {
       if (this.ticking) return;
@@ -168,24 +172,27 @@ export class App {
 
   setLanguage(code: string) { document.documentElement.lang = code; }
   readonly themes: { key: string; name: string; main: string; a2: string; a3: string; accent: string; ink: string; bn?: { main: string; a2: string; a3: string; accent: string } }[] = [
-    // official = the default look; its banners keep the original blue/saffron palette (bn)
+    // official = the base look baked into tokens.scss (the site starts on DEFAULT_THEME); its banners keep the original blue/saffron palette (bn)
     { key: 'official', name: 'Govt Blue', main: '#1a4a94', a2: '#2f6bc4', a3: '#cfe0f7', accent: '#e8891d', ink: '#9a5a05', bn: { main: '#1b5cb8', a2: '#3b8de6', a3: '#bcd9f7', accent: '#f5992a' } },
-    { key: 'saffron', name: 'Saffron', main: '#b45309', a2: '#e8891d', a3: '#fcd9a0', accent: '#1a4a94', ink: '#1a4a94' },
+    { key: 'saffron', name: 'Saffron', main: '#b45309', a2: '#e8891d', a3: '#fcd9a0', accent: '#f5a524', ink: '#8a4b00' },
     { key: 'emerald', name: 'Emerald', main: '#0b6b4b', a2: '#27a577', a3: '#bfeede', accent: '#e8a21d', ink: '#8a5a00' },
     { key: 'teal', name: 'Teal', main: '#0b6b78', a2: '#1fa5b3', a3: '#bcecf0', accent: '#e8891d', ink: '#9a5a05' },
     { key: 'rose', name: 'Rose', main: '#a8174f', a2: '#d9457f', a3: '#f8cfe0', accent: '#e8a21d', ink: '#8a5a00' },
     { key: 'violet', name: 'Violet', main: '#4f35b0', a2: '#7a5fe0', a3: '#d8d0fa', accent: '#e8891d', ink: '#9a5a05' },
   ];
-  theme = signal(this.themes[0]);
+  private static readonly DEFAULT_THEME = 'saffron';
+  /** v2: choices saved before saffron became the default are ignored once, so everyone starts on saffron. */
+  private static readonly THEME_KEY = 'dg-theme-v2';
+  theme = signal(this.themes.find((x) => x.key === App.DEFAULT_THEME)!);
   themeOpen = signal(false);
 
   private static readonly THEME_PROPS = ['--brand', '--brand-rgb', '--brand-2', '--brand-2-rgb', '--brand-3', '--accent', '--accent-rgb', '--accent-ink', '--ink-rgb',
     '--bn-brand', '--bn-brand-rgb', '--bn-brand-2', '--bn-brand-2-rgb', '--bn-brand-3', '--bn-accent', '--bn-accent-rgb', '--bn-ink-rgb'];
 
-  setTheme(t: (typeof this.themes)[number]) {
+  setTheme(t: (typeof this.themes)[number], persist = true) {
     this.theme.set(t);
     const s = document.documentElement.style;
-    try { localStorage.setItem('dg-theme', t.key); } catch { /* storage unavailable */ }
+    if (persist) { try { localStorage.setItem(App.THEME_KEY, t.key); } catch { /* storage unavailable */ } }
     // the default theme lives entirely in tokens.scss (light + dark), so clear any runtime overrides instead of re-setting them
     if (t.key === 'official') { App.THEME_PROPS.forEach((p) => s.removeProperty(p)); return; }
     const dark = this.dark();
@@ -233,7 +240,7 @@ export class App {
   toggleDark(on: boolean) {
     this.dark.set(on);
     document.documentElement.classList.toggle('app-dark', on);
-    if (this.theme().key !== 'official') this.setTheme(this.theme()); // re-derive the theme colours for the new mode
+    if (this.theme().key !== 'official') this.setTheme(this.theme(), false); // re-derive the theme colours for the new mode
   }
 
   setFontScale(v: number) { this.fontScale.set(v); document.documentElement.style.fontSize = v + '%'; }

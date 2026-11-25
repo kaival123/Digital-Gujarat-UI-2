@@ -35,7 +35,7 @@ const CLOSE_MIN = 18 * 60;
             </a>
             <a class="hd-mail" href="mailto:dss-support@gujarat.gov.in">
               <span class="ring" aria-hidden="true"><i class="pi pi-envelope"></i></span>
-              <span><small>Support Email ID</small><b>dss-support&#64;gujarat.gov.in</b></span>
+              <span><small>Support Email ID</small><b>dss-support<wbr>&#64;gujarat.gov.in</b></span>
             </a>
           </div>
         </div>

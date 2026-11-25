@@ -330,14 +330,21 @@ export class CitizenLoginPage {
     if (!c || !ctx) return;
     const { width: w, height: h } = c;
     ctx.clearRect(0, 0, w, h);
+    // colours come from the active colour theme so the captcha matches the rest of the page
+    const css = getComputedStyle(document.documentElement);
+    const rgbOf = (v: string, fb: number[]) => { const p = css.getPropertyValue(v).split(',').map((x) => parseInt(x, 10)); return p.length === 3 && p.every((n) => !isNaN(n)) ? p : fb; };
+    const brand = rgbOf('--brand-rgb', [26, 74, 148]), brand2 = rgbOf('--brand-2-rgb', [47, 107, 196]), accent = rgbOf('--accent-rgb', [232, 137, 29]);
+    const mix = (c: number[], k: number) => `rgb(${c.map((v) => Math.round(v * k)).join(',')})`; // k < 1 darkens
+    const tint = (c: number[], k: number) => `rgb(${c.map((v) => Math.round(v + (255 - v) * k)).join(',')})`; // k → 1 approaches white
     const bg = ctx.createLinearGradient(0, 0, w, h);
-    bg.addColorStop(0, '#eef3fb'); bg.addColorStop(1, '#fbf3e4');
+    bg.addColorStop(0, tint(brand, 0.92)); bg.addColorStop(1, tint(accent, 0.9));
     ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
     const r = (a: number, b: number) => a + Math.random() * (b - a);
     ctx.lineWidth = 1.4;
-    for (let i = 0; i < 6; i++) { ctx.strokeStyle = `rgba(26,74,148,${r(0.2, 0.5)})`; ctx.beginPath(); ctx.moveTo(r(0, w), r(0, h)); ctx.bezierCurveTo(r(0, w), r(0, h), r(0, w), r(0, h), r(0, w), r(0, h)); ctx.stroke(); }
-    for (let i = 0; i < 40; i++) { ctx.fillStyle = `rgba(154,90,5,${r(0.15, 0.45)})`; ctx.fillRect(r(0, w), r(0, h), 2, 2); }
-    const colors = ['#13336b', '#1a4a94', '#2f6bc4', '#9a5a05'];
+    for (let i = 0; i < 6; i++) { ctx.strokeStyle = `rgba(${brand.join(',')},${r(0.2, 0.5)})`; ctx.beginPath(); ctx.moveTo(r(0, w), r(0, h)); ctx.bezierCurveTo(r(0, w), r(0, h), r(0, w), r(0, h), r(0, w), r(0, h)); ctx.stroke(); }
+    for (let i = 0; i < 40; i++) { ctx.fillStyle = `rgba(${mix(accent, 0.65).slice(4, -1)},${r(0.15, 0.45)})`; ctx.fillRect(r(0, w), r(0, h), 2, 2); }
+    // letters stay dark enough to read on the pale background
+    const colors = [mix(brand, 0.55), mix(brand, 0.8), mix(brand2, 0.75), mix(accent, 0.6)];
     [...code].forEach((ch, i) => {
       ctx.save();
       ctx.translate(18 + i * 26, h / 2 + r(-3, 3));

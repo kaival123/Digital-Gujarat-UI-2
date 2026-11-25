@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Reveal, Tilt } from '../shared/motion';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -19,10 +18,6 @@ import janseva from '../data/janseva.json';
 
 interface Item { title: string; img: string; }
 
-function loadFavs(): Set<string> {
-  try { return new Set<string>(JSON.parse(localStorage.getItem('dg-saved') ?? '[]')); } catch { return new Set(); }
-}
-
 const CONFIG: Record<string, { title: string; subtitle: string; page: string; items: Item[] }> = {
   citizen: { title: 'Citizen Services', subtitle: 'Certificates and passes available to every citizen of Gujarat.', page: 'Services/CitizenServices.aspx', items: citizen },
   sugam: { title: 'Sugam Digital Gujarat', subtitle: 'Online services — apply from home.', page: 'Services/SugamDGAbhiyanServices.aspx', items: sugam },
@@ -33,7 +28,7 @@ const CONFIG: Record<string, { title: string; subtitle: string; page: string; it
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-service-list',
-  imports: [FormsModule, RouterLink, ButtonDirective, IconField, InputIcon, InputText, Paginator, Tag, ToggleSwitch, PageHero, Reveal, Tilt],
+  imports: [FormsModule, RouterLink, ButtonDirective, IconField, InputIcon, InputText, Paginator, Tag, PageHero, Reveal, Tilt],
   template: `
     <app-page-hero [title]="cfg().title" [subtitle]="cfg().subtitle" [trail]="trail" />
     <section class="section" data-main tabindex="-1">
@@ -44,10 +39,6 @@ const CONFIG: Record<string, { title: string; subtitle: string; page: string; it
             <input pInputText type="search" enterkeyhint="search" autocomplete="off" [ngModel]="query()" (ngModelChange)="setQuery($event)" placeholder="Search in {{ cfg().title }}…" aria-label="Search services" />
           </p-iconfield>
           <p-tag [value]="filtered().length + ' services'" severity="contrast" [rounded]="true" />
-          <label class="saved-toggle" [class.on]="savedOnly()">
-            <p-toggleswitch [ngModel]="savedOnly()" (ngModelChange)="setSaved($event)" ariaLabel="Show saved only" />
-            <span><i class="pi pi-heart-fill"></i> Saved ({{ favs().size }})</span>
-          </label>
           @if (key() === 'sugam') {
             <a pButton [outlined]="true" routerLink="/user-manual"><i class="pi pi-book"></i> User Manual</a>
           }
@@ -62,9 +53,6 @@ const CONFIG: Record<string, { title: string; subtitle: string; page: string; it
             @for (s of pageItems(); track s.title + $index) {
               <article class="svc-card" appTilt [appReveal]="'up'" [revealDelay]="($index % 4) * 70">
                 <span class="num">{{ first() + $index + 1 }}</span>
-                <button type="button" class="fav" [class.on]="isFav(s.title)" (click)="toggleFav(s.title)" [attr.aria-pressed]="isFav(s.title)" [attr.aria-label]="(isFav(s.title) ? 'Remove from saved: ' : 'Save: ') + s.title">
-                  <i class="pi" [class.pi-heart-fill]="isFav(s.title)" [class.pi-heart]="!isFav(s.title)"></i>
-                </button>
                 <img [src]="img(s.img)" alt="" loading="lazy">
                 <h3>{{ s.title }}</h3>
                 <a class="more" [href]="site + cfg().page" target="_blank" rel="noopener">Read more <i class="pi pi-arrow-right"></i></a>
@@ -73,7 +61,7 @@ const CONFIG: Record<string, { title: string; subtitle: string; page: string; it
           </div>
           <p-paginator [first]="first()" [rows]="rows" [totalRecords]="filtered().length" (onPageChange)="onPage($event)" [showCurrentPageReport]="true" currentPageReportTemplate="{first} – {last} of {totalRecords}" />
         } @else {
-          <p class="empty"><i class="pi pi-search"></i> {{ savedOnly() ? 'No saved services here yet — tap the heart on a card to save it.' : 'No services match “' + query() + '”.' }}</p>
+          <p class="empty"><i class="pi pi-search"></i> No services match “{{ query() }}”.</p>
         }
       </div>
     </section>
@@ -88,8 +76,6 @@ export class ServiceListPage {
   trail = [{ label: 'Services' }];
   query = signal('');
   first = signal(0);
-  savedOnly = signal(false);
-  favs = signal<Set<string>>(loadFavs());
   private qp = toSignal(inject(ActivatedRoute).queryParamMap);
 
   constructor() {
@@ -102,20 +88,10 @@ export class ServiceListPage {
   filtered = computed(() => {
     const q = this.query().trim().toLowerCase();
     const tokens = q.split(/\s+/).filter(Boolean);
-    const favs = this.favs();
-    let items = this.cfg().items;
-    if (this.savedOnly()) items = items.filter((i) => favs.has(i.title));
+    const items = this.cfg().items;
     return tokens.length ? items.filter((i) => tokens.every((t) => i.title.toLowerCase().includes(t))) : items;
   });
 
-  isFav(t: string) { return this.favs().has(t); }
-  toggleFav(t: string) {
-    const s = new Set(this.favs());
-    s.has(t) ? s.delete(t) : s.add(t);
-    this.favs.set(s);
-    try { localStorage.setItem('dg-saved', JSON.stringify([...s])); } catch { /* storage unavailable */ }
-  }
-  setSaved(v: boolean) { this.savedOnly.set(v); this.first.set(0); }
   pageItems = computed(() => this.filtered().slice(this.first(), this.first() + this.rows));
 
   setQuery(v: string) { this.query.set(v); this.first.set(0); }

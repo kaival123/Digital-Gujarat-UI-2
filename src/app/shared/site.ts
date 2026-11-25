@@ -28,7 +28,15 @@ export const NAV: MenuItem[] = openExternal([
   },
   { label: 'Policy', url: 'https://gujaratindia.gov.in/PolicyDetails' },
   { label: 'Business', url: 'https://gujaratindia.gov.in/Home/GujaratTheInvestmentDestination' },
-  { label: 'Latest Update', routerLink: '/latest-update' },
+  {
+    label: 'Latest Update',
+    items: [
+      { label: 'News & Updates', icon: 'pi pi-megaphone', routerLink: '/latest-update', queryParams: { tab: 'news' } },
+      { label: 'Circular / Notification', icon: 'pi pi-file', routerLink: '/latest-update', queryParams: { tab: 'circular' } },
+      { label: 'Government Scheme / Service', icon: 'pi pi-briefcase', url: 'https://mariyojana.gujarat.gov.in/' },
+      { label: 'Government Tenders', icon: 'pi pi-file-edit', url: 'https://gil.gujarat.gov.in/Tenders' },
+    ],
+  },
 ]);
 
 export const LOGIN_MENU: MenuItem[] = openExternal([

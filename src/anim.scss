@@ -105,11 +105,6 @@ html.scroll-locked { overflow: hidden; scrollbar-gutter: stable; }
 }
 @keyframes gradShift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
 
-/* ---- service list: favourites ---- */
-.svc-card .fav { position: absolute; top: 8px; right: 10px; border: 0; background: transparent; color: var(--dg-muted); font-size: 1.1rem; cursor: pointer; padding: 6px; border-radius: 50%; transition: transform 0.2s, color 0.2s; &:hover { color: var(--brand); transform: scale(1.2); } &.on { color: #e11d48; animation: pop 0.4s var(--ease-out); } }
-@keyframes pop { 40% { transform: scale(1.5); } }
-.saved-toggle { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; font-weight: 700; color: var(--dg-muted); &.on { color: #e11d48; } i { color: #e11d48; } }
-
 /* ---- command palette ---- */
 .palette.p-dialog { border-radius: 20px; overflow: hidden; border: 1px solid var(--dg-border); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35); .p-dialog-content { padding: 0; } animation: palIn 0.25s var(--ease-out); }
 @keyframes palIn { from { opacity: 0; transform: translateY(-16px) scale(0.97); } to { opacity: 1; transform: none; } }

@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
 import { TableModule } from 'primeng/table';
@@ -16,7 +18,7 @@ import circulars from '../data/circulars.json';
     <app-page-hero title="Latest Update" subtitle="News, circulars and notifications from Digital Gujarat." />
     <section class="section" data-main tabindex="-1">
       <div class="container">
-        <p-tabs value="news" appReveal="up">
+        <p-tabs [value]="tab()" (valueChange)="setTab($event)" appReveal="up">
           <p-tablist>
             <p-tab value="news"><i class="pi pi-megaphone"></i>&nbsp; News &amp; Updates</p-tab>
             <p-tab value="circular"><i class="pi pi-file"></i>&nbsp; Circular / Notification</p-tab>
@@ -61,6 +63,14 @@ import circulars from '../data/circulars.json';
   `,
 })
 export class LatestUpdatePage {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private qp = toSignal(this.route.queryParamMap, { requireSync: true });
+  /** Tab follows ?tab= so the nav dropdown can deep-link to News or Circulars. */
+  tab = computed(() => (this.qp().get('tab') === 'circular' ? 'circular' : 'news'));
+  setTab(v: string | number | undefined) {
+    this.router.navigate([], { relativeTo: this.route, queryParams: { tab: v }, replaceUrl: true });
+  }
   rows = circulars.map((c) => ({ ...c, link: abs(c.url) }));
   news = [
     { date: '17/08/2026', text: 'If you are unable to access scholarship services via Digital Gujarat, you can avail of them at the Gujarat Scholarship portal.', links: [{ label: 'gssp.gujarat.gov.in', url: 'https://gssp.gujarat.gov.in' }] },
