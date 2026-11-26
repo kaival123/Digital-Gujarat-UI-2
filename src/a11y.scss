@@ -40,8 +40,10 @@ html.lite *, html.lite *::before, html.lite *::after {
   animation-duration: 0.001ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; transition-delay: 0s !important;
 }
 html.a11y-nomotion .reveal, html.lite .reveal { opacity: 1 !important; transform: none !important; }
-html.a11y-nomotion .partners-track, html.lite .partners-track, html.a11y-nomotion .ticker-move, html.lite .ticker-move { animation: none !important; transform: none !important; }
-html.a11y-nomotion .partners-marquee, html.lite .partners-marquee { overflow-x: auto; }
+html.a11y-nomotion .ticker-move, html.lite .ticker-move { animation: none !important; transform: none !important; }
+/* the important-links strip always auto-scrolls (pauses on hover/focus) */
+html .partners-marquee .partners-track { animation: marquee 40s linear infinite !important; }
+html .partners-marquee:hover .partners-track, html .partners-marquee:has(:focus-visible) .partners-track { animation-play-state: paused !important; }
 html.a11y-nomotion .hv-orbit, html.lite .hv-orbit, html.a11y-nomotion .hero-mesh, html.lite .hero-mesh, html.a11y-nomotion .hv-frame, html.lite .hv-frame, html.a11y-nomotion .glass, html.lite .glass { animation: none !important; }
 
 /* ---- Light mode: fewer expensive effects, less data/CPU on slow connections ---- */

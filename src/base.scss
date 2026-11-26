@@ -176,10 +176,12 @@ a[pButton] { text-decoration: none; }
 /* ---------- important links marquee: pauses on hover/focus ---------- */
 .partners-marquee {
   overflow: hidden; padding: 14px 0 22px;
+  scrollbar-width: none; &::-webkit-scrollbar { display: none; }
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   .partners-track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
-  &:hover .partners-track, &:focus-within .partners-track { animation-play-state: paused; }
+  /* pause while hovered; resume as soon as the pointer leaves (mouse-click focus doesn't keep it paused, keyboard focus does) */
+  &:hover .partners-track, &:has(:focus-visible) .partners-track { animation-play-state: paused !important; }
   a {
     flex: none; width: 170px; margin-right: 16px; background: var(--dg-card); border: 1px solid var(--dg-border); border-radius: var(--r-md); padding: 10px; display: grid; place-items: center;
     box-shadow: var(--sh-1); transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base);
@@ -187,7 +189,6 @@ a[pButton] { text-decoration: none; }
   }
   img { max-height: 90px; max-width: 100%; object-fit: contain; }
 }
-@media (prefers-reduced-motion: reduce) { .partners-marquee { overflow-x: auto; .partners-track { animation: none; } } }
 
 /* ---------- carousel arrows ----------
    PrimeNG wraps a <p-button> in the nav element: the wrapper stays plain, the inner button is the round control. */
